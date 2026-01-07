@@ -11,27 +11,35 @@ class Authservice {
 
   //    registering
 
-  async Register({ userName, email, password, role }) {
-    const existing = await this.Userrepository.FindByEmail({ email });
+  async register({ userName, email, password, role }) {
+    
+    const existing = await this.Userrepository.FindByEmail(email);
     if (existing) {
       throw new ApiError(HTTP_STATUS.CONFLICT, HTTP_MESSEGES.USER_EXIST);
     }
 
     const hash = await hashingPassword(password);
 
-    return this.Userrepository.create({
-      messege: HTTP_MESSEGES.REGISTER,
+    const user = await this.Userrepository.create({
       userName,
       email,
       password: hash,
       role,
     });
+
+     return {
+      messege : HTTP_MESSEGES.REGISTER,
+      userId : user._id,
+      email : user.email
+
+     }
+
   }
 
   // logining
 
   async login({ email, password }) {
-    const user = await this.Userrepository.FindByEmail({ email });
+    const user = await this.Userrepository.FindByEmail(email);
     if (!user) {
       throw new ApiError(HTTP_STATUS.NOT_FOUND, HTTP_MESSEGES.USER_NOT_FOUND);
     }

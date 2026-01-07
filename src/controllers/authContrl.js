@@ -9,13 +9,9 @@ class Authcontroller {
   };
 
   login = async (req, res) => {
-    const result = await this.Authservice.login(
-      req.body.email,
-      req.body.password
-    );
+    const result = await this.Authservice.login(req.body);
     res.json(result);
   };
 }
 
 export default Authcontroller;
-

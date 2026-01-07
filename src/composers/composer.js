@@ -1,6 +1,6 @@
-import Authcontroller from "../controllers/authContrl";
-import Authservice from "../services/authServices";
-import { Userrepository } from "../repository/userRepo";
+import Authcontroller from "../controllers/authContrl.js";
+import Authservice from "../services/authServices.js";
+import { Userrepository } from "../repository/userRepo.js";
 
 export const authComposer = () => {
   const userrepo = new Userrepository();
