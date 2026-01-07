@@ -21,5 +21,6 @@ app.use(errorhandler)
 
 app.listen(PORT,()=>{
     console.log('server listerning on the local host port 8080');
+    console.log("j");
     
 })
