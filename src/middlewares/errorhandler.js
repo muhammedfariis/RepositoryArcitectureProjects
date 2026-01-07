@@ -1,9 +1,6 @@
-const errorhandler = (err ,req , res , next)=>{
-    res.status(err.stausCode||500).json({
-        success : false,
-        message : err.message||"internal server errror"
+export const errorhandler = (err , req , res , next)=>{
+    res.status(err.statusCode||500).json({
+        sucsess : false,
+        messege : err.message || "internal server error"
     })
 }
-
-export default errorhandler
-

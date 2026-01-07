@@ -1,8 +1,8 @@
-export class Baserepository {
+export class BaseRepository{
     create(){
         throw new Error("not implimented")
     }
-    findeOne(){
+    findOne(){
         throw new Error("not implimented")
     }
 }

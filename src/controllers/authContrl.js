@@ -1,17 +1,26 @@
-class Authcontroller {
-  constructor(Authservice) {
-    this.Authservice = Authservice;
+
+class AuthControl {
+  constructor(AuthService) {
+    this.AuthService = AuthService;
   }
 
   register = async (req, res) => {
-    const user = await this.Authservice.register(req.body);
-    res.json(user);
+    try {
+      const user = this.AuthService.register(req.body);
+       res.json(user)
+    } catch (err) {
+      next(err);
+    }
   };
 
   login = async (req, res) => {
-    const result = await this.Authservice.login(req.body);
-    res.json(result);
+    try {
+      const logger = this.AuthService.login(req.body);
+       res.json(logger)
+    } catch (err) {
+      next(err);
+    }
   };
 }
 
-export default Authcontroller;
+export default AuthControl;

@@ -1,66 +1,47 @@
-import { hashingPassword, comparePassword } from "../utils/hash.js";
-import { tokenCreation} from "../utils/jwt.js";
-import { HTTP_STATUS } from "../constants/httpstatus.js";
-import { HTTP_MESSEGES } from "../constants/httpmsg.js";
-import { ApiError } from "../Errors/apierror.js";
+import { MESSAGE, Status } from "../constants/http.js";
+import { genaratetoken } from "../utils/jwt.js";
+import { hashpassword, comparepassword } from "../utils/hash.js";
+import { ApiError } from "../Errors/errors.js";
 
-class Authservice {
-  constructor(Userrepository) {
-    this.Userrepository = Userrepository;
+class AuthService {
+  constructor(UserRepository) {
+    this.UserRepository = UserRepository;
   }
 
-  //    registering
-
-  async register({ userName, email, password, role }) {
-    
-    const existing = await this.Userrepository.FindByEmail(email);
+  async register({ userName, email, password }) {
+    const existing = await this.UserRepository.findOne(email);
     if (existing) {
-      throw new ApiError(HTTP_STATUS.CONFLICT, HTTP_MESSEGES.USER_EXIST);
+      throw new ApiError(MESSAGE.USER_EXIST, Status.CONFLICT);
     }
+    const passhash = await hashpassword(password);
 
-    const hash = await hashingPassword(password);
-
-    const user = await this.Userrepository.create({
+    const user = await this.UserRepository.create({
       userName,
       email,
-      password: hash,
-      role,
-    });
-
-     return {
-      messege : HTTP_MESSEGES.REGISTER,
-      userId : user._id,
-      email : user.email
-
-     }
-
-  }
-
-  // logining
-
-  async login({ email, password }) {
-    const user = await this.Userrepository.FindByEmail(email);
-    if (!user) {
-      throw new ApiError(HTTP_STATUS.NOT_FOUND, HTTP_MESSEGES.USER_NOT_FOUND);
-    }
-    const compare = await comparePassword(password, user.password);
-    if (!compare) {
-      throw new ApiError(
-        HTTP_STATUS.UNAUTHARIZED,
-        HTTP_MESSEGES.INVALID_CREDENTIAL
-      );
-    }
-    const token = tokenCreation({
-      id: user._id,
-      role: user.role,
+      password: passhash,
     });
 
     return {
-      message: HTTP_MESSEGES.LOGIN,
+      messege: "registeration completed",
+      user
+    };
+  }
+
+  async login({ email, password }) {
+    const user = await this.UserRepository.findOne(email);
+    if (!user) {
+      throw new ApiError(MESSAGE.USER_NOT_FOUND, Status.UNAUTHORAIZED);
+    }
+    const compare =  await comparepassword(password, user.password);
+
+    const tokens = await genaratetoken(user._id);
+
+    return {
+      messege: "login successfully",
       user,
-      token,
+      tokens,
     };
   }
 }
 
-export default Authservice
+export default AuthService

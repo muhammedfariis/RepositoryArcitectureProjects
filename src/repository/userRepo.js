@@ -1,12 +1,13 @@
-import {Baserepository} from "./baseRepo.js"
-import UserModel from "../models/userModel.js"
+import { BaseRepository } from "./baseRepo.js";
+import Users from "../models/users.js"
 
-export class Userrepository extends Baserepository {
-    FindByEmail(email){
-        return UserModel.findOne({email})
-    }
+export class UserRepository extends BaseRepository {
+   
     create(user){
-        return UserModel.create(user)
+        Users.create(user)
+    }
+
+    findOne(email){
+        Users.findOne(email)
     }
 }
-
