@@ -1,5 +1,5 @@
-import { HTTP_STATUS } from "../constants/httpstatus";
-import { HTTP_MESSEGES } from "../constants/httpmsg";
+import { HTTP_STATUS } from "../constants/httpstatus.js";
+import { HTTP_MESSEGES } from "../constants/httpmsg.js";
 import { tokenverify } from "../utils/jwt.js";
 
 export const AuthValidation = (req, res, next) => {
